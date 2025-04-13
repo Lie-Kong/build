@@ -15,4 +15,4 @@ jobs:
           armbian_board:     "firefly-rk3399"                   # build target
       - name: List files in the repository
         run: |
-          ls ${{ github.workspace }}/output/images
+          ls build/output/images
