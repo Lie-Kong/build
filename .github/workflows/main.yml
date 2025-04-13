@@ -13,34 +13,8 @@ jobs:
           armbian_kernel_branch:    "edge"
           armbian_ui:        "server"
           armbian_board:     "firefly-rk3399"                   # build target
-          
-  list_files:
-    needs: build-armbian
-    runs-on: ubuntu-latest
-    outputs:
-      files_json: ${{ steps.get_files.outputs.files_json }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Get list of files
-        id: get_files
-        run: |
-          DIRECTORY_TO_UPLOAD="build/output/images/" # 将 "your_directory_path" 替换为实际的目录路径
-          cd "$DIRECTORY_TO_UPLOAD"
-          files=$(find . -maxdepth 1 -type f -print0 | xargs -0 -n 1)
-          echo "::set-output name=files_json::$(jq -n --argjson files "[\"$files\"]" '$files')"
-
-  upload_files:
-    needs: list_files
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        file: ${{ fromJson(needs.list_files.outputs.files_json) }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.file }}
-          path: your_directory_path/${{ matrix.file }} # 确保路径正确
+          name: armbian
+          path: build/output/images
