@@ -1,5 +1,6 @@
 name: "Build Armbian"
-on: [push]
+on:
+  [push]
 jobs:
   build-armbian:
     runs-on: ubuntu-latest
@@ -14,6 +15,7 @@ jobs:
           armbian_board:     "firefly-rk3399"                   # build target
           
   list_files:
+    needs: build-armbian
     runs-on: ubuntu-latest
     outputs:
       files_json: ${{ steps.get_files.outputs.files_json }}
